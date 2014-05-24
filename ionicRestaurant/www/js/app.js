@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $state, localStorageService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -18,8 +18,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    console.log('in ,run.moduel')
+
+    var token = localStorageService.get('token');
+    if(!token) {
+      console.log('state transition to login')
+      $state.transitionTo('tab.login');
+    }
   });
 })
+
+.constant('Google', {
+  authorize: 'https://accounts.google.com/o/oauth2/auth',
+  client_id: '375716811110-dfmo45bsu000aj2k3bcah42ico3d5b24.apps.googleusercontent.com',
+  client_secret: '6sU8ZNNAGENQSMkmlbWk_KG2',
+  redirect_uri: 'http://localhost',
+  scope: 'profile'
+})
+
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -37,6 +53,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     })
 
     // Each tab has its own nav history stack:
+    .state('tab.login', {
+      url: '/login',
+      views: {
+        'tab-requests': {
+          templateUrl: 'templates/login.html',
+          controller: 'LoginCtrl'
+        }
+      }
+    })
 
     .state('tab.requests', {
       url: '/requests',

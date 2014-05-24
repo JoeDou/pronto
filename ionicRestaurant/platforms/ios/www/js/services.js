@@ -27,6 +27,7 @@ angular.module('starter.services', [])
 
 .factory('Requests', function() {
   // Might use a resource here that returns a JSON array
+  // GET Request with route
 
   // Some fake testing data
   var requests = [
