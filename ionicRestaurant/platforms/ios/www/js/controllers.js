@@ -13,12 +13,12 @@ angular.module('starter.controllers', ['LocalStorageModule'])
     console.log('opened window')
 
     loginWindow.addEventListener('loadstart', function(e) {
-    $window.alert('listening for events');
+    //$window.alert('listening for events');
 
     var url = e.url;
     var code = /\?code=(.+)$/.exec(url);
     var error = /\?error=(.+)$/.exec(url);
-    $window.alert(url);
+    //$window.alert(url);
 
     // console.log('in event');
     // if (code || error) {
@@ -27,26 +27,32 @@ angular.module('starter.controllers', ['LocalStorageModule'])
     // }
 
     if (code) {
-      window.alert('code' + code[1]);
-      loginWindow.close();
-      $state.transitionTo('tab.requests');
+      //window.alert('code' + code[1]);
 
-      // $http ({
-      //   method: 'POST', 
-      //   url: 'https://accounts.google.com/o/oauth2/token',
-      //   data: {
-      //     code: code[1],
-      //     client_id: Google.client_id,
-      //     client_secret: Google.client_secret,
-      //     redirect_uri: Google.redirect_uri,
-      //     grant_type: 'authorization_code'
-      //   }
-      // }).success(function(data, status){
-      //   window.alert('http', status);
-      //   $state.transitionTo('tab.request');
-      // }).fail(function(data, status){
-      //   window.alert('failed', status);
-      // });
+      var eURL = 'code='+code[1]+'&client_id='+Google.client_id+'&client_secret='+
+      Google.client_secret+'&redirect_uri='+Google.redirect_uri+'&grant_type=authorization_code';
+      //loginWindow.close();
+      //$state.transitionTo('tab.requests');
+
+      $http ({
+        method: 'POST', 
+        url: 'https://accounts.google.com/o/oauth2/token',
+        headers: {
+          'Content-Type':'application/x-www-form-urlencoded'
+        },
+        data : eURL
+
+      }).success(function(data, status){
+
+        var temp = JSON.stringify(data);
+        window.alert('http'+temp);
+        window.alert(data.access_token);
+        //$state.transitionTo('tab.request');
+      }).error(function(data, status){
+        var temp = JSON.stringify(data);
+        window.alert('failed'+temp);
+
+      });
     }
 
     // $scope.show = evt.url;
